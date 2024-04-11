@@ -1,0 +1,10 @@
+D:\univ\y2\2s\lb5-2\bin\Debug\lb5_2.exe.config
+D:\univ\y2\2s\lb5-2\bin\Debug\lb5_2.exe
+D:\univ\y2\2s\lb5-2\bin\Debug\lb5_2.pdb
+D:\univ\y2\2s\lb5-2\obj\Debug\lb5-2.csproj.AssemblyReference.cache
+D:\univ\y2\2s\lb5-2\obj\Debug\lb5-2.csproj.SuggestedBindingRedirects.cache
+D:\univ\y2\2s\lb5-2\obj\Debug\lb5_2.Properties.Resources.resources
+D:\univ\y2\2s\lb5-2\obj\Debug\lb5-2.csproj.GenerateResource.cache
+D:\univ\y2\2s\lb5-2\obj\Debug\lb5-2.csproj.CoreCompileInputs.cache
+D:\univ\y2\2s\lb5-2\obj\Debug\lb5_2.exe
+D:\univ\y2\2s\lb5-2\obj\Debug\lb5_2.pdb
