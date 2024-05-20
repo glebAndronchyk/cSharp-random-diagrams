@@ -38,34 +38,40 @@ namespace lb5_2
             _ctx.Controls.Add(_picture);
         }
 
-        public async void DrawDiagramMultiThread(int maxThreads)
+        public async void DrawDiagramMultiThread()
         {
-            var bitmapData = _bmp.LockBits(new Rectangle(0, 0, _width, _height), ImageLockMode.ReadWrite,
-                _bmp.PixelFormat);
-            Console.WriteLine("bd");
-            var depth = Bitmap.GetPixelFormatSize(bitmapData.PixelFormat) / 8; // bytes per pixel
-            Console.WriteLine("depth");
-            int sectorWidth = _width / maxThreads;
+            Graphics graphics = Graphics.FromImage(_bmp);
             
-            byte[] buffer = new byte[bitmapData.Width * bitmapData.Height * depth];
-            Marshal.Copy(bitmapData.Scan0, buffer, 0, buffer.Length);
+            int segmentWidth = (int)Math.Ceiling((double)_bmp.Width / Environment.ProcessorCount);
+            int segmentHeight = _bmp.Height;
 
             List<Task> tasks = new List<Task>();
-            
-            for (int i = 0; i < maxThreads; i++)
+
+            for (int t = 0; t < Environment.ProcessorCount; t++)
             {
-                int startSectorX = i * sectorWidth;
-                int endSectorX = (i + 1) * sectorWidth;
-                
-                tasks.Add(Task.Run(() => ProcessMultiThreadDrawing(buffer, startSectorX, endSectorX, depth)));
+                int startX = t * segmentWidth;
+                int endX = Math.Min((t + 1) * segmentWidth, _bmp.Width);
+                    
+                tasks.Add(Task.Run(() =>
+                {
+                    for (int x = startX; x < endX; x++)
+                    {
+                        for (int y = 0; y < segmentHeight; y++)
+                        {
+                            Point px = new Point(x, y);
+                        
+                            BuildPoint nearestPoint = Pixel.FindClosestPoint(px, _buildPoints);
+                            
+                            lock (graphics)
+                            {
+                                Pixel.Draw(px, nearestPoint.AssociatedColor, Graphics.FromImage(_bmp));
+                            }
+                        }
+                    }
+                }));
             }
 
-            // await Task.WhenAll(tasks.ToArray());
-
-            Marshal.Copy(buffer, 0, bitmapData.Scan0, buffer.Length);
-            _bmp.UnlockBits(bitmapData);
-
-            _bmp.Save("test1111.png");
+            Task.WaitAll(tasks.ToArray());
         }
 
         private void ProcessMultiThreadDrawing(byte[] buffer, int startX, int endX, int depth)

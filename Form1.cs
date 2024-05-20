@@ -20,7 +20,7 @@ namespace lb5_2
             _pictureContainer = new PictureContainer(this);
             _pictureContainer.Initialize();
             _pictureContainer.AddRandomPoints();
-            _pictureContainer.DrawDiagramMultiThread(4);
+            _pictureContainer.DrawDiagramMultiThread();
         }
     }
 }
